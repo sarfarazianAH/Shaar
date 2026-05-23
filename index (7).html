@@ -1,0 +1,1939 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Shaar | حس وایب شهر</title>
+    
+    <!-- فاویکون (آیکون اپ) -->
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEUSURBVFhH7ZbBDYJAEATnihRwLJASwBIsAUuwBEqwBEoILZASwBKgBErABP2m2V0OyEXYm0yym5nsPXYBG1L+n/tKSpZlWZZlWfYpy/79/e0YY8ayLMsKQgghhBCALMuCOI5hjDHO88wA/QAQRRFM0wQhBKiqCkopVFX1BrT0h7ZtIa1pmmDbtkAQBOC6LpRViS3LsizCsiyWZZm0HMcB27YhSRKYz+dg2zbMZjO4XC6QJAlMp9N+YLfbgWma0DRN33yhCV3XBcMwIEmS/vmCIATL5RJ0XYdN3/dx8zzDNE04n8+QZRksFgvYbDZg2zboui4DJEkCk8kEqqoCy7Le+3meQRRFkGXZzz4GIMsySJIEuq5/eTIMAwRBsB+v1yuEYQhRFC05wzDsx+fzCcuyLMuyLMuy/z+8ARnK+87BT7dvAAAAAElFTkSuQmCC">
+    
+    <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEUSURBVFhH7ZbBDYJAEATnihRwLJASwBIsAUuwBEqwBEoILZASwBKgBErABP2m2V0OyEXYm0yym5nsPXYBG1L+n/tKSpZlWZZlWfYpy/79/e0YY8ayLMsKQgghhBCALMuCOI5hjDHO88wA/QAQRRFM0wQhBKiqCkopVFX1BrT0h7ZtIa1pmmDbtkAQBOC6LpRViS3LsizCsiyWZZm0HMcB27YhSRKYz+dg2zbMZjO4XC6QJAlMp9N+YLfbgWma0DRN33yhCV3XBcMwIEmS/vmCIATL5RJ0XYdN3/dx8zzDNE04n8+QZRksFgvYbDZg2zboui4DJEkCk8kEqqoCy7Le+3meQRRFkGXZzz4GIMsySJIEuq5/eTIMAwRBsB+v1yuEYQhRFC05wzDsx+fzCcuyLMuyLMuy/z+8ARnK+87BT7dvAAAAAElFTkSuQmCC">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Vazirmatn', system-ui, sans-serif; }
+        body { background: #0A0E27; padding: 12px; min-height: 100vh; }
+        .app { max-width: 700px; margin: 0 auto; background: #0A0E27; border-radius: 40px; overflow: hidden; box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.5); }
+        
+        .header { background: linear-gradient(135deg, #0A0E27 0%, #1A1A3A 100%); color: white; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 107, 0, 0.2); }
+        .header h1 { font-size: 1rem; font-weight: 600; background: linear-gradient(90deg, #FF6B00, #FF6B9D); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .streak-box { background: rgba(255, 107, 0, 0.2); backdrop-filter: blur(4px); padding: 5px 12px; border-radius: 40px; font-size: 0.7rem; display: flex; align-items: center; gap: 6px; border: 1px solid rgba(255, 107, 0, 0.3); }
+        .icon-btn { background: rgba(255, 107, 0, 0.15); border: none; color: #FF6B00; font-size: 1.3rem; cursor: pointer; width: 38px; height: 38px; border-radius: 30px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
+        
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; max-width: 700px; margin: 0 auto; background: rgba(26, 26, 58, 0.96); backdrop-filter: blur(12px); display: flex; border-top: 1px solid rgba(255, 107, 0, 0.2); z-index: 200; overflow-x: auto; padding: 8px 12px; gap: 4px; }
+        .nav-item { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 12px; cursor: pointer; font-size: 0.55rem; font-weight: 500; color: #A0A0C0; min-width: 65px; text-align: center; border-radius: 40px; flex: none; transition: all 0.2s ease; }
+        .nav-item span { font-size: 1.2rem; display: block; margin-bottom: 4px; }
+        .nav-item.active { background: linear-gradient(135deg, #FF6B00, #FF6B9D); color: white; box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3); }
+        
+        .page { display: none; padding-bottom: 70px; }
+        .page.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        #map, #addMap { height: calc(100vh - 180px); width: 100%; border-radius: 28px; background: #0A0E27; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 107, 0, 0.2); z-index: 1; }
+        .page3 #addMap { height: calc(100vh - 150px); }
+        
+        .city-mood-card { background: linear-gradient(135deg, #1A1A3A 0%, #2A2A4A 100%); margin: 0 12px 12px 12px; padding: 14px 18px; border-radius: 32px; color: white; display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(255, 107, 0, 0.2); }
+        .nearby-card { background: #1A1A3A; margin: 12px 16px; padding: 12px 16px; border-radius: 28px; display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(255, 107, 0, 0.2); }
+        .nearby-text { font-size: 0.75rem; color: #A0A0C0; }
+        .nearby-badge { background: linear-gradient(135deg, #FF6B00, #FF6B9D); color: white; padding: 4px 12px; border-radius: 30px; font-size: 0.7rem; }
+        
+        .form-card { background: #1A1A3A; margin: 14px 16px; padding: 18px; border-radius: 28px; border: 1px solid rgba(255, 107, 0, 0.15); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
+        .form-card h3, .form-card .form-title { color: #FF6B9D; }
+        
+        .chip-group { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+        .chip { background: #2A2A4A; border: 1px solid rgba(255, 107, 0, 0.2); padding: 8px 16px; border-radius: 40px; font-size: 0.7rem; color: #A0A0C0; cursor: pointer; transition: 0.2s; }
+        .chip.active { background: linear-gradient(135deg, #FF6B00, #FF6B9D); color: white; border: none; }
+        
+        .memory-card { background: #1A1A3A; border-radius: 24px; padding: 16px; margin: 12px 0; border-right: 4px solid #FF6B00; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); position: relative; }
+        .memory-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .memory-place { font-weight: 700; font-size: 1rem; color: white; }
+        .memory-likes { background: #2A2A4A; padding: 4px 10px; border-radius: 30px; font-size: 0.65rem; color: #FF6B9D; }
+        .memory-author { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
+        .memory-avatar { font-size: 1.4rem; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: #2A2A4A; border-radius: 50%; }
+        .memory-name { font-size: 0.8rem; font-weight: 500; color: #FF6B9D; }
+        .memory-mood-vibe { display: flex; gap: 12px; margin: 8px 0 0 0; font-size: 0.7rem; color: #A0A0C0; }
+        .memory-story { font-size: 0.85rem; line-height: 1.6; color: #E0E0E0; margin: 12px 0; padding: 12px; background: #2A2A4A; border-radius: 16px; }
+        .memory-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 0.65rem; color: #A0A0C0; }
+        .memory-actions { display: flex; gap: 8px; margin-top: 8px; }
+        .edit-btn, .delete-btn { background: #2A2A4A; border: 1px solid rgba(255, 107, 0, 0.3); padding: 4px 12px; border-radius: 20px; font-size: 0.65rem; cursor: pointer; color: #A0A0C0; transition: 0.2s; }
+        .edit-btn:hover { background: #FF6B00; color: white; }
+        .delete-btn:hover { background: #e74c3c; color: white; }
+        .like-btn { background: #2A2A4A; border: 1px solid rgba(255, 107, 0, 0.3); padding: 6px 16px; border-radius: 30px; font-size: 0.7rem; cursor: pointer; color: #A0A0C0; transition: 0.2s; }
+        .like-btn.liked { background: #FF6B9D; color: white; border: none; }
+        
+        .search-box { display: flex; gap: 10px; background: #2A2A4A; padding: 6px 12px; border-radius: 48px; border: 1px solid rgba(255, 107, 0, 0.3); margin: 12px; }
+        .search-box input { flex: 1; border: none; padding: 12px 0; background: transparent; color: white; outline: none; }
+        .search-box input::placeholder { color: #A0A0C0; }
+        .search-box button { width: auto; margin: 0; padding: 8px 20px; background: linear-gradient(135deg, #FF6B00, #FF6B9D); border-radius: 40px; font-size: 0.75rem; color: white; border: none; cursor: pointer; }
+        .sort-select { width: auto; padding: 8px 16px; border-radius: 40px; border: 1px solid rgba(255, 107, 0, 0.3); background: #2A2A4A; color: white; font-size: 0.7rem; }
+        .filter-select { width: 100%; padding: 12px 16px; border-radius: 32px; border: 1px solid rgba(255, 107, 0, 0.3); margin: 8px 0; font-size: 0.85rem; background: #2A2A4A; color: white; cursor: pointer; }
+        .time-filter-select { width: auto; padding: 8px 16px; border-radius: 32px; border: 1px solid rgba(255, 107, 0, 0.3); background: #2A2A4A; color: white; cursor: pointer; font-size: 0.7rem; margin-left: 8px; }
+        .location-type-select { width: 100%; padding: 12px 16px; border-radius: 32px; border: 1px solid rgba(255, 107, 0, 0.3); margin: 8px 0; font-size: 0.85rem; background: #2A2A4A; color: white; cursor: pointer; }
+        .mood-select, .vibe-select { width: 100%; padding: 12px 16px; border-radius: 32px; border: 1px solid rgba(255, 107, 0, 0.3); margin: 8px 0; font-size: 0.85rem; background: #2A2A4A; color: white; cursor: pointer; }
+        button { background: linear-gradient(135deg, #FF6B00, #FF6B9D); color: white; border: none; padding: 12px 16px; border-radius: 44px; font-weight: 600; width: 100%; margin: 8px 0; cursor: pointer; }
+        .today-section { margin: 20px 16px; }
+        .section-title { font-size: 1rem; font-weight: 700; color: #FF6B9D; margin-bottom: 12px; }
+        .today-card { min-width: 145px; background: #1A1A3A; border-radius: 28px; padding: 12px; box-shadow: 0 6px 14px rgba(0,0,0,0.2); border-right: 4px solid #FF6B00; cursor: pointer; color: white; }
+        .footer-space { height: 65px; }
+        .toast-message { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); background: #1A1A3A; color: white; padding: 12px 24px; border-radius: 50px; font-size: 0.8rem; z-index: 1000; opacity: 0; transition: opacity 0.3s; pointer-events: none; border: 1px solid rgba(255, 107, 0, 0.3); }
+        .toast-message.show { opacity: 1; }
+        .empty-state { background: #2A2A4A; border-radius: 28px; padding: 48px 20px; text-align: center; color: #A0A0C0; }
+        
+        .friend-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,107,0,0.2); }
+        .friend-avatar { font-size: 2rem; margin-left: 12px; }
+        .friend-name { font-weight: 600; color: white; }
+        .friend-mood { font-size: 0.65rem; color: #A0A0C0; }
+        .request-card { background: #2A2A4A; border-radius: 20px; padding: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .request-actions button { width: auto; margin: 0; padding: 6px 16px; font-size: 0.7rem; }
+        .horizontal-scroll { display: flex; gap: 12px; overflow-x: auto; padding: 4px 0; }
+        .char-counter { font-size: 0.65rem; color: #A0A0C0; text-align: left; margin-top: 4px; }
+        .search-result-item { background: #2A2A4A; padding: 8px 12px; margin: 4px 0; border-radius: 20px; cursor: pointer; color: white; font-size: 0.7rem; }
+        
+        /* انیمیشن پالس نوری */
+        @keyframes soft-pulse-center {
+            0% { opacity: 0.4; }
+            50% { opacity: 0.85; }
+            100% { opacity: 0.4; }
+        }
+        .emotion-circle-pulse {
+            animation: soft-pulse-center 3s ease-in-out infinite;
+        }
+        
+        /* اسپلش اسکرین */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #0A0E27 0%, #1A1A3A 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease;
+        }
+        .splash-screen.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .splash-logo {
+            font-size: 4rem;
+            background: linear-gradient(135deg, #FF6B00, #FF6B9D);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 16px;
+        }
+        .splash-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 8px;
+        }
+        .splash-subtitle {
+            font-size: 0.8rem;
+            color: #A0A0C0;
+        }
+        .splash-spinner {
+            margin-top: 30px;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #2A2A4A;
+            border-top: 3px solid #FF6B00;
+            border-radius: 50%;
+            animation: splashSpin 1s linear infinite;
+        }
+        @keyframes splashSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* لودینگ اسپینر عمومی */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .loading-overlay.show {
+            visibility: visible;
+            opacity: 1;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #2A2A4A;
+            border-top: 4px solid #FF6B00;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* مودال ثبت خاطره */
+        .memory-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .memory-modal.show {
+            visibility: visible;
+            opacity: 1;
+        }
+        .memory-modal-content {
+            background: #1A1A3A;
+            border-radius: 32px;
+            padding: 24px;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid rgba(255, 107, 0, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .memory-modal-content h3 {
+            color: #FF6B9D;
+            margin-bottom: 16px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+        .memory-modal-content input, 
+        .memory-modal-content textarea, 
+        .memory-modal-content select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            background: #2A2A4A;
+            border: 1px solid rgba(255, 107, 0, 0.3);
+            border-radius: 24px;
+            color: white;
+            font-size: 0.85rem;
+        }
+        .memory-modal-content textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        .checkbox-row input {
+            width: 20px;
+            margin: 0;
+        }
+        .checkbox-row label {
+            margin: 0;
+            color: #A0A0C0;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .modal-buttons button {
+            flex: 1;
+            margin: 0;
+        }
+        
+        input, textarea, select {
+            font-family: 'Vazirmatn', system-ui, sans-serif;
+        }
+        
+        /* مودال ادیت خاطره */
+        .edit-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1002;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .edit-modal.show {
+            visibility: visible;
+            opacity: 1;
+        }
+        .edit-modal-content {
+            background: #1A1A3A;
+            border-radius: 32px;
+            padding: 24px;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid rgba(255, 107, 0, 0.3);
+        }
+        .edit-modal-content h3 {
+            color: #FF6B9D;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .edit-modal-content input, 
+        .edit-modal-content textarea, 
+        .edit-modal-content select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            background: #2A2A4A;
+            border: 1px solid rgba(255, 107, 0, 0.3);
+            border-radius: 24px;
+            color: white;
+        }
+        .edit-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .edit-buttons button {
+            flex: 1;
+            margin: 0;
+        }
+        
+        /* ردیف فیلترها */
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        .filter-row .filter-label {
+            font-size: 0.7rem;
+            color: #A0A0C0;
+        }
+        
+        /* استایل مکان اسپانسر */
+        .sponsored-badge {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #1A1A3A;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.55rem;
+            font-weight: bold;
+            margin-right: 8px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<!-- اسپلش اسکرین -->
+<div id="splash" class="splash-screen">
+    <div class="splash-logo">📍</div>
+    <div class="splash-title">Shaar</div>
+    <div class="splash-subtitle">حس وایب شهر</div>
+    <div class="splash-spinner"></div>
+</div>
+
+<div class="app">
+    <div class="header">
+        <h1>📍 Shaar | حس وایب شهر</h1>
+        <div id="streakBox" class="streak-box"><span>👣</span><span id="streakCount">0</span><span>رد</span></div>
+        <button class="icon-btn" id="profileBtn">👤</button>
+    </div>
+
+    <!-- صفحه 1: دوروبرت -->
+    <div id="page1" class="page">
+        <div class="form-card">
+            <h3 style="color:#FF6B9D;">✨ دوروبرت</h3>
+            <p style="font-size:0.7rem; color:#A0A0C0;">بر اساس ردپای مردم</p>
+        </div>
+        <div class="nearby-card" id="nearbyVibeCard">
+            <div class="nearby-text">📍 دوروبرت چی می‌گذره؟</div>
+            <div class="nearby-badge">⏳</div>
+        </div>
+        <div class="form-card">
+            <div>
+                <label style="font-size:0.75rem; color:#FF6B9D;">🌡️ فیلتر وایب</label>
+                <select id="filterVibe" class="filter-select"><option value="">همه</option></select>
+            </div>
+            <div>
+                <label style="font-size:0.75rem; color:#FF6B9D; margin-top:12px; display:block;">🏷️ نوع مکان</label>
+                <select id="placeTypeSelect" class="location-type-select">
+                    <option value="">همه مکان‌ها 📌</option>
+                    <option value="cafe">کافه ☕</option>
+                    <option value="coffeehouse">قهوه‌خانه 🫖</option>
+                    <option value="restaurant">رستوران 🍽️</option>
+                    <option value="mall">مرکز خرید 🛍️</option>
+                    <option value="cinema">سینما 🎬</option>
+                    <option value="theater">تئاتر 🎭</option>
+                    <option value="gym">باشگاه 💪</option>
+                    <option value="salon">آرایشگاه ✂️</option>
+                    <option value="date">مکان دیت 💕</option>
+                    <option value="gathering">دورهمی طور 🎉</option>
+                    <option value="hangout">پاتوق 🏠</option>
+                    <option value="work">محل کار 💼</option>
+                    <option value="other">سایر 📍</option>
+                </select>
+            </div>
+            <div style="background:#2A2A4A; border-radius:24px; padding:12px 16px; margin:16px 0; display:flex; justify-content:space-between;">
+                <div style="color:#A0A0C0;">🎯 با مودت</div>
+                <div class="nearby-badge" id="personalSuggestionBadge">ورود کن</div>
+            </div>
+            <button id="applyFiltersBtn">بگرد</button>
+        </div>
+        <div id="suggestionsResults"></div>
+        <div class="footer-space"></div>
+    </div>
+
+    <!-- صفحه 2: نقشه (با دایره‌های وایب) -->
+    <div id="page2" class="page">
+        <div class="search-box">
+            <input type="text" id="mainMapSearchInput" placeholder="🔍 جستجوی مکان...">
+            <button id="mainMapSearchBtn">جستجو</button>
+        </div>
+        <div id="mainMapSearchResults" style="display:none; margin: 0 12px;"></div>
+        <div class="city-mood-card" id="cityMoodCard">
+            <div class="city-mood-text" id="cityMoodText">در حال محاسبه...</div>
+            <div class="city-mood-icon" id="cityMoodIcon">🔥</div>
+        </div>
+        <div id="map"></div>
+        <div class="today-section">
+            <div class="section-title">🔥 پربازدیدهای امروز</div>
+            <div class="horizontal-scroll" id="todayScrollContainer"></div>
+        </div>
+        <div class="footer-space"></div>
+    </div>
+
+    <!-- صفحه 3: رد بذار (نقشه بزرگ + مودال) -->
+    <div id="page3" class="page page3">
+        <div class="search-box">
+            <input type="text" id="addMapSearchInput" placeholder="🔍 جستجوی مکان...">
+            <button id="addMapSearchBtn">جستجو</button>
+        </div>
+        <div id="addMapSearchResults" style="display:none; margin: 0 12px;"></div>
+        <div id="addMap"></div>
+        <div class="footer-space"></div>
+    </div>
+
+    <!-- صفحه 4: بگرد -->
+    <div id="page4" class="page">
+        <div class="form-card">
+            <h3 style="color:#FF6B9D;">🔍 بگرد تو ردها</h3>
+            
+            <div class="search-box" style="margin:0 0 16px 0;">
+                <input type="text" id="searchPlaceInput" placeholder="اسم جای...">
+                <button id="searchTextBtn">جستجو</button>
+            </div>
+            
+            <div class="filter-row">
+                <span class="filter-label">📅 محدوده زمانی:</span>
+                <select id="timeFilterSelect" class="time-filter-select">
+                    <option value="all">همه زمان‌ها</option>
+                    <option value="today">امروز</option>
+                    <option value="week">این هفته</option>
+                    <option value="month">این ماه</option>
+                </select>
+            </div>
+            
+            <div class="filter-row">
+                <span class="filter-label">📊 مرتب‌سازی:</span>
+                <select id="sortSelect" class="time-filter-select">
+                    <option value="newest">جدیدترین</option>
+                    <option value="mostLiked">پرلایک‌ترین</option>
+                </select>
+            </div>
+            
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top: 16px;">
+                <select id="searchMoodFilter" class="filter-select" style="flex:1;">
+                    <option value="">همه مودها</option>
+                </select>
+                <select id="searchVibeFilter" class="filter-select" style="flex:1;">
+                    <option value="">همه وایب‌ها</option>
+                </select>
+                <button id="clearFiltersBtn" style="width:auto; background:#2A2A4A; color:#A0A0C0; padding: 8px 16px;">پاک</button>
+            </div>
+        </div>
+        <div id="searchResultsContainer"></div>
+        <div class="footer-space"></div>
+    </div>
+
+    <!-- صفحه 5: دایره دوستان -->
+    <div id="page5" class="page">
+        <div class="form-card"><h3 style="color:#FF6B9D;">👥 دایره دوستان</h3><p style="font-size:0.7rem; color:#A0A0C0;">رفیقاتو ببین، باهاشون ارتباط بگیر</p></div>
+        <div class="form-card" id="friendRequestsSection"><div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;"><span style="font-size:1.2rem;">📨</span><span style="font-weight:700; color:white;">درخواست‌ها</span></div><div id="friendRequestsList"></div></div>
+        <div class="form-card"><div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;"><span style="font-size:1.2rem;">🔍</span><span style="font-weight:700; color:white;">پیدا کردن رفیق</span></div>
+            <div class="search-box" style="margin-bottom:12px;"><input type="text" id="searchUserInput" placeholder="اسم رفیق..."><button id="searchUserBtn">بگرد</button></div>
+            <div id="userSearchResults"></div>
+        </div>
+        <div class="form-card"><div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;"><span style="font-size:1.2rem;">💚</span><span style="font-weight:700; color:white;">رفیقات</span></div><div id="friendsList"></div></div>
+        <div class="footer-space"></div>
+    </div>
+
+    <!-- صفحه 6: من -->
+    <div id="page6" class="page">
+        <div class="form-card" id="loginSection"><h3 style="color:#FF6B9D;">🔐 ورود / ثبت‌نام</h3>
+            <input type="text" id="loginUsername" placeholder="اسم کاربری" style="background:#2A2A4A; color:white; padding:12px; border-radius:24px; border:1px solid rgba(255,107,0,0.3); width:100%; margin:8px 0;">
+            <input type="password" id="loginPassword" placeholder="رمز (حداقل ۶ کاراکتر)" style="background:#2A2A4A; color:white; padding:12px; border-radius:24px; border:1px solid rgba(255,107,0,0.3); width:100%; margin:8px 0;">
+            <button id="loginBtn">ورود</button>
+            <button id="registerBtn" style="background:linear-gradient(135deg, #FF6B9D, #FF6B00);">ثبت‌نام</button>
+        </div>
+        <div id="profileSection" style="display:none;"><div class="form-card" style="text-align:center;">
+            <div style="font-size:3rem; background:#2A2A4A; width:70px; height:70px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; border:2px solid #FF6B00;">👤</div>
+            <h3 id="profileName" style="color:#FF6B9D;"></h3>
+            <div style="margin-top:8px; font-size:0.7rem; color:#A0A0C0;">📝 ردهای تو: <span id="userMemoriesCount">0</span></div>
+            <div style="margin-top:4px; font-size:0.7rem; color:#A0A0C0;">❤️ لایک گرفته: <span id="userReceivedLikes">0</span></div>
+            <div style="margin-top:4px; font-size:0.7rem; color:#A0A0C0;">👥 رفیقا: <span id="friendsCountProfile">0</span></div>
+            <button id="logoutBtn" style="background:#FF6B9D; margin-top:16px;">🚪 خروج</button>
+        </div></div>
+        <div class="footer-space"></div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item" data-page="1"><span>✨</span>دوروبرت</div>
+        <div class="nav-item active" data-page="2"><span>🗺️</span>نقشه</div>
+        <div class="nav-item" data-page="3"><span>➕</span>رد بذار</div>
+        <div class="nav-item" data-page="4"><span>📖</span>بگرد</div>
+        <div class="nav-item" data-page="5"><span>👥</span>دایره دوستان</div>
+        <div class="nav-item" data-page="6"><span>👤</span>من</div>
+    </div>
+</div>
+
+<div id="toast" class="toast-message"></div>
+
+<!-- لودینگ اسپینر عمومی -->
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="spinner"></div>
+</div>
+
+<!-- مودال ثبت خاطره -->
+<div id="memoryModal" class="memory-modal">
+    <div class="memory-modal-content">
+        <h3>✨ ثبت خاطره جدید</h3>
+        <input type="text" id="modalPlaceName" placeholder="📍 اسم مکان">
+        <select id="modalLocationTypeSelect" class="location-type-select">
+            <option value="other">سایر 📍</option>
+            <option value="cafe">کافه ☕</option>
+            <option value="coffeehouse">قهوه‌خانه 🫖</option>
+            <option value="restaurant">رستوران 🍽️</option>
+            <option value="mall">مرکز خرید 🛍️</option>
+            <option value="cinema">سینما 🎬</option>
+            <option value="theater">تئاتر 🎭</option>
+            <option value="gym">باشگاه 💪</option>
+            <option value="salon">آرایشگاه ✂️</option>
+            <option value="date">مکان دیت 💕</option>
+            <option value="gathering">دورهمی طور 🎉</option>
+            <option value="hangout">پاتوق 🏠</option>
+            <option value="work">محل کار 💼</option>
+        </select>
+        <select id="modalMoodSelect" class="mood-select">
+            <option value="social">مود تو</option>
+        </select>
+        <select id="modalVibeSelect" class="vibe-select">
+            <option value="vibe">وایب مکان</option>
+        </select>
+        <textarea id="modalStory" rows="3" placeholder="📝 حس تو رو بنویس... (۱۴۰ حرف)"></textarea>
+        <div class="char-counter" id="modalCharCounter">۰/۱۴۰</div>
+        <div class="checkbox-row">
+            <input type="checkbox" id="modalAnonymousCheckbox">
+            <label>🕶️ بی‌رد (ناشناس)</label>
+        </div>
+        <select id="modalPrivacySelect">
+            <option value="public">🌍 همه</option>
+            <option value="friends">👥 فقط رفیقا</option>
+            <option value="private">🔒 فقط من</option>
+        </select>
+        <div class="modal-buttons">
+            <button id="modalSubmitBtn">✅ بذار</button>
+            <button id="modalCancelBtn" style="background:#2A2A4A; color:#A0A0C0;">❌ انصراف</button>
+        </div>
+    </div>
+</div>
+
+<!-- مودال ادیت خاطره -->
+<div id="editModal" class="edit-modal">
+    <div class="edit-modal-content">
+        <h3>✏️ ویرایش خاطره</h3>
+        <input type="text" id="editPlaceName" placeholder="اسم مکان">
+        <select id="editMoodSelect"></select>
+        <select id="editVibeSelect"></select>
+        <textarea id="editStory" rows="3" placeholder="حست رو بنویس..."></textarea>
+        <select id="editPrivacySelect">
+            <option value="public">🌍 همه</option>
+            <option value="friends">👥 فقط رفیقا</option>
+            <option value="private">🔒 فقط من</option>
+        </select>
+        <div class="edit-buttons">
+            <button id="saveEditBtn" style="background:linear-gradient(135deg, #FF6B00, #FF6B9D);">💾 ذخیره</button>
+            <button id="cancelEditBtn" style="background:#2A2A4A; color:#A0A0C0;">❌ انصراف</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ========== تابع هپتیک (لرزش) ==========
+function hapticFeedback() {
+    if(navigator.vibrate) {
+        navigator.vibrate(50);
+    }
+}
+
+// ========== مدیریت دکمه بازگشت ==========
+let currentPage = 2;
+let pageHistory = [2];
+
+function pushPageToHistory(pageNum) {
+    if(pageHistory[pageHistory.length - 1] !== pageNum) {
+        pageHistory.push(pageNum);
+        history.pushState({ page: pageNum }, '', '');
+    }
+}
+
+window.addEventListener('popstate', function(event) {
+    if(pageHistory.length > 1) {
+        pageHistory.pop();
+        let previousPage = pageHistory[pageHistory.length - 1];
+        switchPage(previousPage);
+    } else {
+        if(confirm('آیا می‌خواهید از Shaar خارج شوید؟')) {
+            history.back();
+        } else {
+            history.pushState({ page: currentPage }, '', '');
+        }
+    }
+});
+
+// ========== Firebase تنظیمات ==========
+const firebaseConfig = {
+    apiKey: "AIzaSyCvNhr_vO_8XCtd9Oxbye7Bc1rax3KZLTY",
+    authDomain: "shaarapp-9acd4.firebaseapp.com",
+    projectId: "shaarapp-9acd4",
+    storageBucket: "shaarapp-9acd4.firebasestorage.app",
+    messagingSenderId: "335636413497",
+    appId: "1:335636413497:web:d22e5c8b0462f3059de1e8"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+// ========== مودها و وایب‌ها ==========
+const moodList = {
+    high_positive: [{ mood: "اجتماعی", emoji: "👥" }, { mood: "سرحال", emoji: "😃" }, { mood: "پایه", emoji: "⚡" }],
+    low_positive: [{ mood: "آروم", emoji: "😌" }, { mood: "ریلکس", emoji: "🌿" }],
+    high_negative: [{ mood: "عصبی", emoji: "😤" }, { mood: "آشفته", emoji: "😖" }, { mood: "کلافه", emoji: "😩" }, { mood: "بی‌قرار", emoji: "🌀" }, { mood: "شاکی", emoji: "😒" }],
+    low_negative: [{ mood: "خسته", emoji: "😴" }, { mood: "بی‌حوصله", emoji: "😑" }, { mood: "تنها", emoji: "🕳️" }, { mood: "بی‌حال", emoji: "🫥" }, { mood: "دلتنگ", emoji: "💔" }, { mood: "دلگیر", emoji: "🌧️" }]
+};
+
+const allVibesData = [
+    { vibe: "زنده", emoji: "🔥", color: "#e67e22" }, { vibe: "پرجنب‌وجوش", emoji: "🎉", color: "#f39c12" },
+    { vibe: "مناسب تمرکز", emoji: "📚", color: "#2ecc71" }, { vibe: "رسمی", emoji: "👔", color: "#3498db" },
+    { vibe: "شبانه", emoji: "🌙", color: "#9b59b6" }, { vibe: "رمانتیک", emoji: "💖", color: "#e74c3c" },
+    { vibe: "دیتی", emoji: "💑", color: "#ff6b81" }, { vibe: "دونفره", emoji: "👥", color: "#f1c40f" },
+    { vibe: "هنری", emoji: "🎨", color: "#8e44ad" }, { vibe: "ترندی", emoji: "🔥", color: "#e67e22" },
+    { vibe: "جوانانه", emoji: "🧑‍🎤", color: "#f39c12" }, { vibe: "دانشجویی", emoji: "🎓", color: "#2980b9" },
+    { vibe: "فان", emoji: "🎪", color: "#f1c40f" }, { vibe: "غیررسمی", emoji: "👕", color: "#95a5a6" },
+    { vibe: "آزاردهنده", emoji: "😖", color: "#c0392b" }, { vibe: "بی‌نظم", emoji: "🗑️", color: "#7f8c8d" }
+];
+
+let allMoods = [];
+let moodMap = {};
+for(let cat in moodList) {
+    for(let m of moodList[cat]) {
+        allMoods.push(m);
+        moodMap[m.mood] = m;
+    }
+}
+
+let vibeMap = {};
+for(let v of allVibesData) vibeMap[v.vibe] = v;
+
+// لیست معتبر انواع مکان‌ها (برای فیلتر دوروبرت)
+const validLocationTypes = [
+    "cafe", "coffeehouse", "restaurant", "mall", "cinema", "theater", 
+    "gym", "salon", "date", "gathering", "hangout", "work", "other"
+];
+
+// ========== مکان‌های اسپانسر (تبلیغات ویژه) ==========
+const sponsoredPlaces = [
+    { name: "کافه اسپرانتو", type: "cafe", vibe: "پرانرژی", activity: 28, emoji: "🔥", sponsored: true },
+    { name: "رستوران مدیترانه", type: "restaurant", vibe: "رمانتیک", activity: 15, emoji: "💖", sponsored: true },
+    { name: "مجتمع تجاری پالادیوم", type: "mall", vibe: "پرجنب‌وجوش", activity: 22, emoji: "🛍️", sponsored: true },
+    { name: "باشگاه ورزشی انقلاب", type: "gym", vibe: "پرانرژی", activity: 12, emoji: "💪", sponsored: true },
+    { name: "کافه کتاب (شعبه مرکزی)", type: "cafe", vibe: "آرامش‌بخش", activity: 18, emoji: "📚", sponsored: true }
+];
+
+// ========== دیتای اولیه (Seed Data) ==========
+// 15 مکان واقعی تهران با خاطرات نمونه
+const seedPlaces = [
+    { name: "کافه نادری", lat: 35.702, lng: 51.408, type: "cafe", stories: ["فضای قدیمی و دلنشین، قهوه عالی", "همیشه شلوغ ولی پرانرژی"] },
+    { name: "کافه رستوران پل", lat: 35.720, lng: 51.380, type: "cafe", stories: ["منظره عالی، جای خوبی برای قرار دوستانه"] },
+    { name: "کافه تئاتر شهر", lat: 35.685, lng: 51.390, type: "cafe", stories: ["بعد از تئاتر، بهترین جای برای گپ زدن"] },
+    { name: "رستوران بهشت", lat: 35.754, lng: 51.424, type: "restaurant", stories: ["غذاهای سنتی عالی، کباب بینظیر"] },
+    { name: "سینما آزادی", lat: 35.689, lng: 51.389, type: "cinema", stories: ["سالن‌های مدرن، صدای عالی"] },
+    { name: "تئاتر شهر", lat: 35.685, lng: 51.392, type: "theater", stories: ["اجراهای خوب، فضای هنری"] },
+    { name: "پلاتو اجرا", lat: 35.700, lng: 51.400, type: "theater", stories: ["اجراهای خصوصی و جذاب"] },
+    { name: "باشگاه انقلاب", lat: 35.700, lng: 51.395, type: "gym", stories: ["امکانات عالی، مربیان حرفه‌ای"] },
+    { name: "آرایشگاه مدرن", lat: 35.710, lng: 51.410, type: "salon", stories: ["مدل‌های جدید، خدمات عالی"] },
+    { name: "کافی‌شاپ ملت", lat: 35.740, lng: 51.420, type: "cafe", stories: ["قهوه تخصصی خوب، جای دنج"] },
+    { name: "برج میلاد", lat: 35.744, lng: 51.375, type: "restaurant", stories: ["چرخش آهسته، منظره ۳۶۰ درجه"] },
+    { name: "پارک وی (مرکز خرید)", lat: 35.720, lng: 51.380, type: "mall", stories: ["تنوع فروشگاه‌ها، فودکورت خوب"] },
+    { name: "کافه کتاب", lat: 35.695, lng: 51.405, type: "cafe", stories: ["کتاب‌های خوب، قهوه عالی، جای آرام"] },
+    { name: "کافه بوم", lat: 35.715, lng: 51.415, type: "cafe", stories: ["دکور سنتی، چای دبش"] },
+    { name: "اسپرانتو", lat: 35.725, lng: 51.425, type: "cafe", stories: ["محبوب جوانان، همیشه پر از انرژی مثبت"] }
+];
+
+// ========== داده‌های اصلی ==========
+let currentUser = null;
+let mainMap = null;
+let addMap = null;
+let selectedLat = null;
+let selectedLng = null;
+let selectedMarker = null;
+let vibeClusterLayer = null;
+let selectedMood = allMoods[0];
+let selectedVibe = allVibesData[0];
+let editingMemoryId = null;
+
+// ========== توابع کمکی ==========
+function showToast(msg) {
+    let toast = document.getElementById('toast');
+    toast.innerText = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+function showLoading(show) {
+    let overlay = document.getElementById('loadingOverlay');
+    if(show) overlay.classList.add('show');
+    else overlay.classList.remove('show');
+}
+
+function getVibeColor(vibeName) {
+    let v = vibeMap[vibeName];
+    return v ? v.color : "#FF6B00";
+}
+
+async function getLikeCount(memoryId) {
+    let snapshot = await db.collection('likes').where('memoryId', '==', memoryId).get();
+    return snapshot.size;
+}
+
+async function hasUserLiked(memoryId) {
+    if(!currentUser) return false;
+    let snapshot = await db.collection('likes').where('memoryId', '==', memoryId).where('userId', '==', currentUser.uid).get();
+    return !snapshot.empty;
+}
+
+async function getUserMemoriesCount() {
+    if(!currentUser) return 0;
+    let snapshot = await db.collection('memories').where('userId', '==', currentUser.uid).get();
+    return snapshot.size;
+}
+
+async function getReceivedLikesCount() {
+    if(!currentUser) return 0;
+    let memoriesSnapshot = await db.collection('memories').where('userId', '==', currentUser.uid).get();
+    let count = 0;
+    for(let doc of memoriesSnapshot.docs) {
+        let likesSnapshot = await db.collection('likes').where('memoryId', '==', doc.id).get();
+        count += likesSnapshot.size;
+    }
+    return count;
+}
+
+async function getFriendsCount() {
+    if(!currentUser) return 0;
+    let userDoc = await db.collection('users').doc(currentUser.uid).get();
+    let friends = userDoc.data()?.friends || [];
+    return friends.length;
+}
+
+function canViewMemory(memory, memoryUserId) {
+    if(!memory) return false;
+    if(memoryUserId === currentUser?.uid) return true;
+    if(memory.isAnonymous) return true;
+    if(memory.privacy === "public") return true;
+    return false;
+}
+
+function clearSelectedLocation() {
+    selectedLat = null;
+    selectedLng = null;
+    if(selectedMarker && addMap) {
+        addMap.removeLayer(selectedMarker);
+        selectedMarker = null;
+    }
+}
+
+// ========== تابع اضافه کردن دیتای اولیه ==========
+async function addSeedData() {
+    // بررسی اینکه آیا دیتای اولیه قبلاً اضافه شده
+    let existingPlaces = [];
+    let memoriesSnapshot = await db.collection('memories').get();
+    for(let doc of memoriesSnapshot.docs) {
+        let mem = doc.data();
+        existingPlaces.push(mem.placeName);
+    }
+    
+    let addedCount = 0;
+    for(let place of seedPlaces) {
+        // فقط اگه این مکان قبلاً ثبت نشده بود
+        if(!existingPlaces.includes(place.name)) {
+            // هر مکان با 1-2 خاطره نمونه
+            let storiesToAdd = place.stories.slice(0, 2);
+            for(let storyText of storiesToAdd) {
+                let randomMood = allMoods[Math.floor(Math.random() * allMoods.length)];
+                let randomVibe = allVibesData[Math.floor(Math.random() * allVibesData.length)];
+                
+                let memoryData = {
+                    userId: "system",
+                    authorName: "Shaar",
+                    lat: place.lat + (Math.random() - 0.5) * 0.002,
+                    lng: place.lng + (Math.random() - 0.5) * 0.002,
+                    placeName: place.name,
+                    userMood: randomMood.mood,
+                    userMoodEmoji: randomMood.emoji,
+                    placeVibe: randomVibe.vibe,
+                    placeVibeEmoji: randomVibe.emoji,
+                    story: storyText,
+                    isAnonymous: false,
+                    privacy: "public",
+                    type: place.type,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    date: new Date().toISOString(),
+                    isSeed: true
+                };
+                await db.collection('memories').add(memoryData);
+                addedCount++;
+            }
+        }
+    }
+    if(addedCount > 0) {
+        console.log(`${addedCount} خاطره نمونه اضافه شد`);
+    }
+}
+
+// ========== دوستیابی ==========
+async function sendFriendRequest(toUserId) {
+    if(!currentUser) { showToast("وارد شو"); return; }
+    if(toUserId === currentUser.uid) { showToast("نمی‌تونی به خودت درخواست بدی"); return; }
+    
+    let userDoc = await db.collection('users').doc(currentUser.uid).get();
+    let userFriends = userDoc.data()?.friends || [];
+    if(userFriends.includes(toUserId)) { showToast("از قبل رفیق هستید"); return; }
+    
+    let existing = await db.collection('friendRequests').where('fromUserId', '==', currentUser.uid).where('toUserId', '==', toUserId).where('status', '==', 'pending').get();
+    if(!existing.empty) { showToast("قبلاً درخواست دادی"); return; }
+    
+    await db.collection('friendRequests').add({
+        fromUserId: currentUser.uid,
+        toUserId: toUserId,
+        status: "pending",
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    showToast("درخواست دوستی فرستاده شد");
+    renderFriendsPage();
+}
+
+async function acceptFriendRequest(requestId, fromUserId) {
+    if(!currentUser) return;
+    await db.collection('friendRequests').doc(requestId).update({ status: "accepted" });
+    
+    await db.collection('users').doc(currentUser.uid).update({
+        friends: firebase.firestore.FieldValue.arrayUnion(fromUserId)
+    });
+    await db.collection('users').doc(fromUserId).update({
+        friends: firebase.firestore.FieldValue.arrayUnion(currentUser.uid)
+    });
+    showToast("درخواست قبول شد");
+    renderFriendsPage();
+    updateProfileUI();
+}
+
+async function rejectFriendRequest(requestId) {
+    await db.collection('friendRequests').doc(requestId).update({ status: "rejected" });
+    showToast("درخواست رد شد");
+    renderFriendsPage();
+}
+
+async function removeFriend(friendId) {
+    if(!currentUser) return;
+    await db.collection('users').doc(currentUser.uid).update({
+        friends: firebase.firestore.FieldValue.arrayRemove(friendId)
+    });
+    await db.collection('users').doc(friendId).update({
+        friends: firebase.firestore.FieldValue.arrayRemove(currentUser.uid)
+    });
+    showToast("رفیق حذف شد");
+    renderFriendsPage();
+    updateProfileUI();
+}
+
+async function renderFriendsPage() {
+    if(!currentUser) {
+        document.getElementById('friendRequestsSection').style.display = 'none';
+        document.getElementById('friendsList').innerHTML = '<div class="empty-state">وارد شو تا رفیقاتو ببینی</div>';
+        document.getElementById('userSearchResults').innerHTML = '';
+        return;
+    }
+    document.getElementById('friendRequestsSection').style.display = 'block';
+    
+    let requestsSnapshot = await db.collection('friendRequests')
+        .where('toUserId', '==', currentUser.uid)
+        .where('status', '==', 'pending')
+        .get();
+    
+    let reqHtml = '';
+    if(requestsSnapshot.empty) reqHtml = '<div class="empty-state">هیچ درخواستی نداری</div>';
+    else for(let doc of requestsSnapshot.docs) {
+        let req = doc.data();
+        let fromUser = await db.collection('users').doc(req.fromUserId).get();
+        let fromName = fromUser.data()?.name || "کاربر";
+        reqHtml += `<div class="request-card">
+            <div><strong style="color:white;">${fromName}</strong></div>
+            <div class="request-actions" style="display:flex; gap:8px;">
+                <button onclick="acceptFriendRequest('${doc.id}', '${req.fromUserId}')" style="background:#55EFC4; color:#1A1A3A;">قبول</button>
+                <button onclick="rejectFriendRequest('${doc.id}')" style="background:#FF7675;">رد</button>
+            </div>
+        </div>`;
+    }
+    document.getElementById('friendRequestsList').innerHTML = reqHtml;
+    
+    let userDoc = await db.collection('users').doc(currentUser.uid).get();
+    let friendsIds = userDoc.data()?.friends || [];
+    let friendsHtml = '';
+    if(friendsIds.length === 0) friendsHtml = '<div class="empty-state">هنوز رفیقی نداری 😢</div>';
+    else for(let fid of friendsIds) {
+        let friendDoc = await db.collection('users').doc(fid).get();
+        let friendName = friendDoc.data()?.name || "کاربر";
+        friendsHtml += `<div class="friend-item">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <div class="friend-avatar">👤</div>
+                <div><div class="friend-name">${friendName}</div></div>
+            </div>
+            <button onclick="removeFriend('${fid}')" style="background:#2A2A4A; border:1px solid #FF6B00; padding:6px 12px; border-radius:20px; color:#FF6B9D; cursor:pointer;">❌ حذف</button>
+        </div>`;
+    }
+    document.getElementById('friendsList').innerHTML = friendsHtml;
+}
+
+async function searchUsers() {
+    let query = document.getElementById('searchUserInput').value.trim().toLowerCase();
+    if(!query) { document.getElementById('userSearchResults').innerHTML = ''; return; }
+    
+    let usersSnapshot = await db.collection('users').get();
+    let results = [];
+    usersSnapshot.forEach(doc => {
+        if(doc.id !== currentUser?.uid) {
+            let name = doc.data().name;
+            if(name && name.toLowerCase().includes(query)) {
+                results.push({ id: doc.id, name: name });
+            }
+        }
+    });
+    
+    let userDoc = await db.collection('users').doc(currentUser?.uid).get();
+    let friendsIds = userDoc.data()?.friends || [];
+    results = results.filter(r => !friendsIds.includes(r.id));
+    
+    let html = '';
+    if(results.length === 0) html = '<div class="empty-state">کسی پیدا نشد</div>';
+    else for(let u of results) {
+        html += `<div class="request-card">
+            <div><strong style="color:white;">${u.name}</strong></div>
+            <button onclick="sendFriendRequest('${u.id}')" style="background:#6C5CE7; width:auto; padding:6px 20px;">➕ رفیق شیم</button>
+        </div>`;
+    }
+    document.getElementById('userSearchResults').innerHTML = html;
+}
+
+// ========== لایک ==========
+window.likeMemory = async function(memoryId, memoryUserId) {
+    if(!currentUser) { showToast("وارد شو"); return; }
+    
+    let existing = await db.collection('likes').where('memoryId', '==', memoryId).where('userId', '==', currentUser.uid).get();
+    if(!existing.empty) {
+        await existing.docs[0].ref.delete();
+        showToast("لایکت پس گرفته شد");
+    } else {
+        await db.collection('likes').add({
+            memoryId: memoryId,
+            userId: currentUser.uid,
+            memoryUserId: memoryUserId,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        showToast("لایک شد! ❤️");
+        hapticFeedback();
+    }
+    
+    renderSearchResults();
+    updateProfileUI();
+};
+
+// ========== ویرایش و حذف خاطره ==========
+window.editMemory = function(memoryId, placeName, mood, vibe, story, privacy) {
+    editingMemoryId = memoryId;
+    document.getElementById('editPlaceName').value = placeName;
+    document.getElementById('editStory').value = story || '';
+    document.getElementById('editPrivacySelect').value = privacy || 'public';
+    
+    let moodSelect = document.getElementById('editMoodSelect');
+    for(let i = 0; i < moodSelect.options.length; i++) {
+        if(moodSelect.options[i].value === mood) {
+            moodSelect.selectedIndex = i;
+            break;
+        }
+    }
+    
+    let vibeSelect = document.getElementById('editVibeSelect');
+    for(let i = 0; i < vibeSelect.options.length; i++) {
+        if(vibeSelect.options[i].value === vibe) {
+            vibeSelect.selectedIndex = i;
+            break;
+        }
+    }
+    
+    document.getElementById('editModal').classList.add('show');
+};
+
+window.deleteMemory = async function(memoryId) {
+    if(!confirm('آیا مطمئنی میخوای این رد رو پاک کنی؟')) return;
+    
+    showLoading(true);
+    try {
+        let likesSnapshot = await db.collection('likes').where('memoryId', '==', memoryId).get();
+        for(let doc of likesSnapshot.docs) {
+            await doc.ref.delete();
+        }
+        await db.collection('memories').doc(memoryId).delete();
+        showToast("رد پاک شد");
+        renderSearchResults();
+        updateMapStats();
+        updateProfileUI();
+    } catch(error) {
+        showToast("خطا در پاک کردن: " + error.message);
+    } finally {
+        showLoading(false);
+    }
+};
+
+async function saveEditMemory() {
+    if(!editingMemoryId) return;
+    
+    let newPlaceName = document.getElementById('editPlaceName').value.trim();
+    let newMood = document.getElementById('editMoodSelect').value;
+    let newVibe = document.getElementById('editVibeSelect').value;
+    let newStory = document.getElementById('editStory').value;
+    let newPrivacy = document.getElementById('editPrivacySelect').value;
+    
+    if(!newPlaceName) {
+        showToast("اسم مکان رو بنویس");
+        return;
+    }
+    
+    showLoading(true);
+    try {
+        await db.collection('memories').doc(editingMemoryId).update({
+            placeName: newPlaceName,
+            userMood: newMood,
+            userMoodEmoji: moodMap[newMood]?.emoji || '😃',
+            placeVibe: newVibe,
+            placeVibeEmoji: vibeMap[newVibe]?.emoji || '🔥',
+            story: newStory,
+            privacy: newPrivacy,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        showToast("خاطره ویرایش شد");
+        document.getElementById('editModal').classList.remove('show');
+        editingMemoryId = null;
+        renderSearchResults();
+        updateMapStats();
+    } catch(error) {
+        showToast("خطا در ویرایش: " + error.message);
+    } finally {
+        showLoading(false);
+    }
+}
+
+// ========== خوشه‌بندی وایب روی نقشه اصلی ==========
+async function drawVibeClusters() {
+    if(vibeClusterLayer) {
+        vibeClusterLayer.eachLayer(layer => mainMap.removeLayer(layer));
+        vibeClusterLayer = null;
+    }
+    vibeClusterLayer = L.layerGroup();
+    
+    let memoriesSnapshot = await db.collection('memories').get();
+    let realMemories = [];
+    for(let doc of memoriesSnapshot.docs) {
+        let mem = doc.data();
+        mem.id = doc.id;
+        if(canViewMemory(mem, mem.userId)) {
+            realMemories.push(mem);
+        }
+    }
+    
+    if(realMemories.length === 0) return;
+    
+    let radiusKm = 1;
+    let radiusMeters = radiusKm * 1000;
+    
+    function getDistance(lat1, lon1, lat2, lon2) {
+        let R = 6371;
+        let dLat = (lat2 - lat1) * Math.PI / 180;
+        let dLon = (lon2 - lon1) * Math.PI / 180;
+        let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
+    }
+    
+    let used = [];
+    for(let i = 0; i < realMemories.length; i++) {
+        if(used.includes(i)) continue;
+        let members = [];
+        let vibes = [];
+        for(let j = 0; j < realMemories.length; j++) {
+            let dist = getDistance(realMemories[i].lat, realMemories[i].lng, realMemories[j].lat, realMemories[j].lng);
+            if(dist <= radiusKm) {
+                members.push(realMemories[j]);
+                if(realMemories[j].placeVibe) vibes.push(realMemories[j].placeVibe);
+                if(!used.includes(j)) used.push(j);
+            }
+        }
+        if(members.length > 0) {
+            let vibeCount = {};
+            for(let vibe of vibes) vibeCount[vibe] = (vibeCount[vibe] || 0) + 1;
+            let dominantVibe = "پرجنب‌وجوش";
+            let maxCount = 0;
+            for(let vibe in vibeCount) if(vibeCount[vibe] > maxCount) { maxCount = vibeCount[vibe]; dominantVibe = vibe; }
+            let color = getVibeColor(dominantVibe);
+            let sumLat = 0, sumLng = 0;
+            for(let m of members) { sumLat += m.lat; sumLng += m.lng; }
+            let centerLat = sumLat / members.length;
+            let centerLng = sumLng / members.length;
+            let circle = L.circle([centerLat, centerLng], {
+                radius: radiusMeters,
+                color: color,
+                weight: 2,
+                fillColor: color,
+                fillOpacity: 0.7,
+                className: "emotion-circle-pulse"
+            }).addTo(vibeClusterLayer);
+            
+            let vibeObj = vibeMap[dominantVibe];
+            circle.bindPopup(`
+                <div style="text-align:center; direction:rtl;">
+                    <b>🎨 وایب این منطقه</b><br>
+                    🌡️ ${vibeObj ? vibeObj.emoji + ' ' + dominantVibe : dominantVibe}<br>
+                    📊 ${members.length} رد<br>
+                    📏 شعاع ${radiusKm} کیلومتر
+                </div>
+            `);
+        }
+    }
+    vibeClusterLayer.addTo(mainMap);
+}
+
+// ========== مود شهر ==========
+async function updateCityMood() {
+    let memoriesSnapshot = await db.collection('memories').get();
+    let realMemories = [];
+    for(let doc of memoriesSnapshot.docs) {
+        let mem = doc.data();
+        if(canViewMemory(mem, mem.userId)) {
+            realMemories.push(mem);
+        }
+    }
+    
+    if(realMemories.length === 0) {
+        document.getElementById('cityMoodText').innerHTML = "⏳ هنوز ردی نیست";
+        document.getElementById('cityMoodIcon').innerHTML = "⏳";
+        return;
+    }
+    let moodCount = {};
+    for(let m of allMoods) moodCount[m.mood] = 0;
+    for(let m of realMemories) if(m.userMood && moodCount[m.userMood] !== undefined) moodCount[m.userMood]++;
+    let maxMood = "سرحال", maxCnt = 0;
+    for(let mood in moodCount) if(moodCount[mood] > maxCnt) { maxCnt = moodCount[mood]; maxMood = mood; }
+    let moodObj = moodMap[maxMood];
+    let percent = Math.round((maxCnt / realMemories.length) * 100);
+    document.getElementById('cityMoodText').innerHTML = `🌆 ${percent}٪ مردم شهر ${moodObj ? moodObj.emoji + ' ' + maxMood : maxMood}ن`;
+    document.getElementById('cityMoodIcon').innerHTML = moodObj ? moodObj.emoji : "🔥";
+}
+
+// ========== دوروبرت ==========
+function updateNearbyVibe() {
+    if(!navigator.geolocation) {
+        document.getElementById('nearbyVibeCard').innerHTML = '<div class="nearby-text">📍 لوکیشن؟</div><div class="nearby-badge">⛔</div>';
+        return;
+    }
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+        let userLat = pos.coords.latitude;
+        let userLng = pos.coords.longitude;
+        
+        let memoriesSnapshot = await db.collection('memories').get();
+        let nearbyVibes = {};
+        for(let v of allVibesData) nearbyVibes[v.vibe] = 0;
+        let totalNearby = 0;
+        
+        for(let doc of memoriesSnapshot.docs) {
+            let m = doc.data();
+            if(canViewMemory(m, m.userId) && m.placeVibe) {
+                let dist = Math.sqrt(Math.pow(m.lat - userLat, 2) + Math.pow(m.lng - userLng, 2)) * 111;
+                if(dist <= 2) {
+                    totalNearby++;
+                    if(nearbyVibes[m.placeVibe] !== undefined) nearbyVibes[m.placeVibe]++;
+                }
+            }
+        }
+        
+        if(totalNearby === 0) {
+            document.getElementById('nearbyVibeCard').innerHTML = '<div class="nearby-text">📍 دوروبرت خالیه</div><div class="nearby-badge">🔇</div>';
+            return;
+        }
+        let maxVibe = "پرجنب‌وجوش", maxCnt = 0;
+        for(let v in nearbyVibes) if(nearbyVibes[v] > maxCnt) { maxCnt = nearbyVibes[v]; maxVibe = v; }
+        let vibeObj = vibeMap[maxVibe];
+        document.getElementById('nearbyVibeCard').innerHTML = `<div class="nearby-text">📍 دوروبرت</div><div class="nearby-badge">${vibeObj ? vibeObj.emoji + ' ' + maxVibe : maxVibe}</div>`;
+    }, () => {
+        document.getElementById('nearbyVibeCard').innerHTML = '<div class="nearby-text">📍 لوکیشن دسترسی نیست</div><div class="nearby-badge">⛔</div>';
+    });
+}
+
+// ========== پیشنهاد مکان (دوروبرت) با اسپانسر ==========
+let selectedPlaceType = "";
+
+async function renderSuggestions() {
+    let filterVibe = document.getElementById('filterVibe').value;
+    let selectedType = document.getElementById('placeTypeSelect').value;
+    
+    let memoriesSnapshot = await db.collection('memories').get();
+    
+    // آمار مکان‌ها از دیتابیس
+    let placeStats = {};
+    
+    for(let doc of memoriesSnapshot.docs) {
+        let m = doc.data();
+        if(canViewMemory(m, m.userId) && validLocationTypes.includes(m.type)) {
+            if(!placeStats[m.placeName]) {
+                placeStats[m.placeName] = {
+                    count: 0,
+                    vibe: m.placeVibe,
+                    emoji: m.placeVibeEmoji || '📍',
+                    type: m.type,
+                    vibeCount: {}
+                };
+            }
+            placeStats[m.placeName].count++;
+            if(m.placeVibe) {
+                placeStats[m.placeName].vibeCount[m.placeVibe] = (placeStats[m.placeName].vibeCount[m.placeVibe] || 0) + 1;
+            }
+        }
+    }
+    
+    // تعیین وایب غالب هر مکان
+    for(let name in placeStats) {
+        let maxVibe = "پرجنب‌وجوش";
+        let maxCount = 0;
+        for(let vibe in placeStats[name].vibeCount) {
+            if(placeStats[name].vibeCount[vibe] > maxCount) {
+                maxCount = placeStats[name].vibeCount[vibe];
+                maxVibe = vibe;
+            }
+        }
+        placeStats[name].vibe = maxVibe;
+    }
+    
+    // تبدیل به آرایه
+    let places = Object.keys(placeStats).map(name => ({
+        name: name,
+        type: placeStats[name].type,
+        vibe: placeStats[name].vibe,
+        activity: placeStats[name].count,
+        emoji: placeStats[name].emoji,
+        sponsored: false
+    }));
+    
+    // اضافه کردن مکان‌های اسپانسر (اگر در دیتابیس نباشند)
+    for(let sponsor of sponsoredPlaces) {
+        let existing = places.find(p => p.name === sponsor.name);
+        if(!existing) {
+            places.push({
+                name: sponsor.name,
+                type: sponsor.type,
+                vibe: sponsor.vibe,
+                activity: sponsor.activity,
+                emoji: sponsor.emoji,
+                sponsored: true
+            });
+        } else {
+            existing.sponsored = true;
+            // می‌تونیم activity رو بیشتر کنیم یا برچسب بزنیم
+        }
+    }
+    
+    // فیلتر بر اساس نوع مکان
+    if(selectedType && selectedType !== "") {
+        places = places.filter(p => p.type === selectedType);
+    }
+    
+    // فیلتر بر اساس وایب
+    if(filterVibe) {
+        places = places.filter(p => p.vibe === filterVibe);
+    }
+    
+    // جداسازی مکان‌های اسپانسر و بقیه
+    let sponsoredList = places.filter(p => p.sponsored === true);
+    let normalList = places.filter(p => p.sponsored !== true);
+    
+    // مرتب‌سازی بر اساس تعداد خاطره (بیشترین اول)
+    normalList.sort((a,b) => b.activity - a.activity);
+    
+    let container = document.getElementById('suggestionsResults');
+    if(places.length === 0) {
+        container.innerHTML = '<div class="form-card empty-state">هنوز ردپایی نیست 😢<br>اولین رد رو تو صفحه «رد بذار» بذار</div>';
+        return;
+    }
+    
+    let html = '<div class="form-card"><h3 style="color:#FF6B9D;">🔥 پرطرفدارترین مکان‌ها</h3>';
+    
+    // نمایش مکان‌های اسپانسر در بالای لیست
+    if(sponsoredList.length > 0) {
+        html += '<div style="margin-bottom: 16px;"><div style="font-size:0.7rem; color:#FFD700; margin-bottom:8px;">✨ تبلیغات ویژه</div>';
+        for(let p of sponsoredList.slice(0, 5)) {
+            let vibeObj = vibeMap[p.vibe];
+            html += `<div style="background: linear-gradient(135deg, #2A2A4A, #1A1A3A); border-radius:20px; padding:12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; border:1px solid rgba(255,215,0,0.5);">
+                <div><strong style="color:white;">📍 ${p.name}</strong> <span class="sponsored-badge">⭐ ویژه</span><br><span style="font-size:0.65rem; color:#FF6B9D;">${vibeObj ? vibeObj.emoji + ' ' + p.vibe : p.vibe}</span></div>
+                <div><span style="background:linear-gradient(135deg, #FF6B00, #FF6B9D); padding:4px 12px; border-radius:30px; font-size:0.65rem;">👣 ${p.activity} رد</span></div>
+            </div>`;
+        }
+        html += '</div>';
+    }
+    
+    // نمایش بقیه مکان‌ها
+    for(let p of normalList.slice(0, 20)) {
+        let vibeObj = vibeMap[p.vibe];
+        html += `<div style="background:#2A2A4A; border-radius:20px; padding:12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+            <div><strong style="color:white;">📍 ${p.name}</strong><br><span style="font-size:0.65rem; color:#FF6B9D;">${vibeObj ? vibeObj.emoji + ' ' + p.vibe : p.vibe}</span></div>
+            <div><span style="background:linear-gradient(135deg, #FF6B00, #FF6B9D); padding:4px 12px; border-radius:30px; font-size:0.65rem;">👣 ${p.activity} رد</span></div>
+        </div>`;
+    }
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+// ========== امروز داغه ==========
+async function renderTodaySection() {
+    let container = document.getElementById('todayScrollContainer');
+    let memoriesSnapshot = await db.collection('memories').get();
+    let today = new Date().toDateString();
+    let placeCount = {};
+    
+    for(let doc of memoriesSnapshot.docs) {
+        let m = doc.data();
+        if(canViewMemory(m, m.userId)) {
+            let memDate = new Date(m.createdAt?.toDate() || m.date);
+            if(memDate.toDateString() === today) {
+                if(!placeCount[m.placeName]) placeCount[m.placeName] = { count: 0, vibe: m.placeVibe };
+                placeCount[m.placeName].count++;
+            }
+        }
+    }
+    
+    let topPlaces = Object.keys(placeCount).map(name => ({ name, ...placeCount[name] })).sort((a,b) => b.count - a.count).slice(0, 5);
+    
+    if(topPlaces.length === 0) {
+        container.innerHTML = '<div class="empty-state" style="padding:20px;">هنوز ردی امروز ثبت نشده</div>';
+        return;
+    }
+    container.innerHTML = '';
+    for(let p of topPlaces) {
+        let vibeObj = vibeMap[p.vibe];
+        container.innerHTML += `<div class="today-card">
+            <div class="today-place">📍 ${p.name}</div>
+            <div class="today-emotion">${vibeObj ? vibeObj.emoji + ' ' + p.vibe : p.vibe}</div>
+            <div class="today-stats">👣 ${p.count} رد</div>
+        </div>`;
+    }
+}
+
+// ========== جستجو ==========
+let currentFilter = "all", currentSort = "newest", currentSearchText = "", currentMoodFilter = "", currentVibeFilter = "";
+
+async function renderSearchResults() {
+    let memoriesSnapshot = await db.collection('memories').orderBy('createdAt', 'desc').get();
+    let results = [];
+    
+    for(let doc of memoriesSnapshot.docs) {
+        let m = doc.data();
+        m.id = doc.id;
+        if(canViewMemory(m, m.userId)) {
+            results.push(m);
+        }
+    }
+    
+    if(currentSearchText) results = results.filter(m => m.placeName.toLowerCase().includes(currentSearchText.toLowerCase()));
+    if(currentMoodFilter) results = results.filter(m => m.userMood === currentMoodFilter);
+    if(currentVibeFilter) results = results.filter(m => m.placeVibe === currentVibeFilter);
+    
+    let now = new Date();
+    if(currentFilter === "today") results = results.filter(m => {
+        let memDate = new Date(m.createdAt?.toDate() || m.date);
+        return memDate.toDateString() === now.toDateString();
+    });
+    else if(currentFilter === "week") results = results.filter(m => {
+        let memDate = new Date(m.createdAt?.toDate() || m.date);
+        return memDate >= new Date(now.getTime() - 7 * 86400000);
+    });
+    else if(currentFilter === "month") results = results.filter(m => {
+        let memDate = new Date(m.createdAt?.toDate() || m.date);
+        let startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        return memDate >= startOfMonth;
+    });
+    
+    if(currentSort === "newest") {
+        results.sort((a,b) => {
+            let dateA = new Date(a.createdAt?.toDate() || a.date);
+            let dateB = new Date(b.createdAt?.toDate() || b.date);
+            return dateB - dateA;
+        });
+    } else if(currentSort === "mostLiked") {
+        for(let m of results) {
+            m.likeCount = await getLikeCount(m.id);
+        }
+        results.sort((a,b) => (b.likeCount || 0) - (a.likeCount || 0));
+    }
+    
+    let container = document.getElementById('searchResultsContainer');
+    if(results.length === 0) {
+        container.innerHTML = '<div class="empty-state">هیچ ردپایی پیدا نشد 😢<br>اولین رد رو تو صفحه «رد بذار» بذار</div>';
+        return;
+    }
+    
+    let html = '<div class="form-card"><h3 style="color:#FF6B9D;">🔥 ردها</h3>';
+    for(let m of results.slice(0, 50)) {
+        let moodObj = moodMap[m.userMood];
+        let vibeObj = vibeMap[m.placeVibe];
+        let likeCount = await getLikeCount(m.id);
+        let userLiked = await hasUserLiked(m.id);
+        let dateStr = new Date(m.createdAt?.toDate() || m.date).toLocaleDateString('fa-IR');
+        let authorName = m.isAnonymous ? "ناشناس" : (m.authorName || "کاربر");
+        let isOwner = currentUser && m.userId === currentUser.uid;
+        
+        html += `<div class="memory-card">
+            <div class="memory-header">
+                <div class="memory-place">📍 ${m.placeName}</div>
+                <div class="memory-likes">❤️ ${likeCount}</div>
+            </div>
+            <div class="memory-author">
+                <div class="memory-avatar">${m.isAnonymous ? '🕶️' : '👤'}</div>
+                <div class="memory-name">${authorName}</div>
+            </div>
+            <div class="memory-mood-vibe">
+                <span>😊 ${moodObj ? moodObj.emoji + ' ' + m.userMood : m.userMood}</span>
+                <span>🌡️ ${vibeObj ? vibeObj.emoji + ' ' + m.placeVibe : m.placeVibe}</span>
+            </div>
+            <div class="memory-story">📖 "${m.story || '...'}"</div>
+            <div class="memory-footer">
+                <span>📅 ${dateStr} | ${m.privacy === 'public' ? '🌍' : (m.privacy === 'friends' ? '👥' : '🔒')}</span>
+                <button class="like-btn ${userLiked ? 'liked' : ''}" onclick="likeMemory('${m.id}', '${m.userId}')">${userLiked ? '❤️ پس بگیر' : '👍 لایک'}</button>
+            </div>
+            ${isOwner ? `<div class="memory-actions">
+                <button class="edit-btn" onclick="editMemory('${m.id}', '${m.placeName.replace(/'/g, "\\'")}', '${m.userMood}', '${m.placeVibe}', '${(m.story || '').replace(/'/g, "\\'")}', '${m.privacy}')">✏️ ویرایش</button>
+                <button class="delete-btn" onclick="deleteMemory('${m.id}')">🗑️ حذف</button>
+            </div>` : ''}
+        </div>`;
+    }
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+// ========== اضافه کردن خاطره ==========
+async function addMemoryFromModal() {
+    if(!currentUser) { showToast("وارد شو"); return; }
+    if(selectedLat === null) { showToast("لطفاً روی نقشه کلیک کن"); return; }
+    
+    let place = document.getElementById('modalPlaceName').value.trim();
+    if(!place) { showToast("اسم مکان رو بنویس"); return; }
+    
+    let story = document.getElementById('modalStory').value;
+    if(story.length > 140) { showToast("حداکثر ۱۴۰ حرف"); return; }
+    
+    let isAnon = document.getElementById('modalAnonymousCheckbox').checked;
+    let privacy = document.getElementById('modalPrivacySelect').value;
+    let mood = document.getElementById('modalMoodSelect').value;
+    let vibe = document.getElementById('modalVibeSelect').value;
+    let locationType = document.getElementById('modalLocationTypeSelect').value;
+    let moodObj = moodMap[mood];
+    let vibeObj = vibeMap[vibe];
+    
+    showLoading(true);
+    try {
+        let memoryData = {
+            userId: currentUser.uid,
+            authorName: isAnon ? null : (currentUser.displayName || currentUser.email?.split('@')[0] || "کاربر"),
+            lat: selectedLat,
+            lng: selectedLng,
+            placeName: place,
+            userMood: mood,
+            userMoodEmoji: moodObj?.emoji || '😃',
+            placeVibe: vibe,
+            placeVibeEmoji: vibeObj?.emoji || '🔥',
+            story: story,
+            isAnonymous: isAnon,
+            privacy: privacy,
+            type: locationType,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            date: new Date().toISOString()
+        };
+        
+        await db.collection('memories').add(memoryData);
+        
+        document.getElementById('memoryModal').classList.remove('show');
+        clearSelectedLocation();
+        
+        document.getElementById('modalPlaceName').value = '';
+        document.getElementById('modalStory').value = '';
+        document.getElementById('modalAnonymousCheckbox').checked = false;
+        document.getElementById('modalPrivacySelect').value = 'public';
+        document.getElementById('modalLocationTypeSelect').value = 'other';
+        document.getElementById('modalCharCounter').innerText = '۰/۱۴۰';
+        
+        updateMapStats();
+        showToast("ردت موند 🔥");
+        hapticFeedback();
+        updateStreakCount();
+        updateProfileUI();
+    } catch(error) {
+        showToast("خطا: " + error.message);
+    } finally {
+        showLoading(false);
+    }
+}
+
+function openModalForLocation(lat, lng) {
+    selectedLat = lat;
+    selectedLng = lng;
+    
+    if(selectedMarker) addMap.removeLayer(selectedMarker);
+    selectedMarker = L.marker([lat, lng]).addTo(addMap);
+    
+    document.getElementById('memoryModal').classList.add('show');
+}
+
+function closeModal() {
+    document.getElementById('memoryModal').classList.remove('show');
+    clearSelectedLocation();
+}
+
+async function updateMapStats() {
+    await drawVibeClusters();
+    await updateCityMood();
+    updateNearbyVibe();
+    await renderSuggestions();
+    await renderTodaySection();
+    await renderSearchResults();
+}
+
+function updateStreakCount() {
+    db.collection('memories').get().then(snapshot => {
+        document.getElementById('streakCount').innerText = snapshot.size;
+    });
+}
+
+function updatePersonalSuggestion() {
+    let badge = document.getElementById('personalSuggestionBadge');
+    if(!currentUser) { badge.innerHTML = 'ورود کن'; return; }
+    badge.innerHTML = `${selectedMood.emoji} ${selectedMood.mood} → پیشنهاد`;
+}
+
+async function updateProfileUI() {
+    if(currentUser) {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('profileSection').style.display = 'block';
+        let name = currentUser.displayName || currentUser.email?.split('@')[0] || "کاربر";
+        document.getElementById('profileName').innerText = name;
+        document.getElementById('userMemoriesCount').innerText = await getUserMemoriesCount();
+        document.getElementById('userReceivedLikes').innerText = await getReceivedLikesCount();
+        let friendsCount = await getFriendsCount();
+        document.getElementById('friendsCountProfile').innerText = friendsCount;
+        await renderFriendsPage();
+    } else {
+        document.getElementById('loginSection').style.display = 'block';
+        document.getElementById('profileSection').style.display = 'none';
+    }
+}
+
+// ========== راه‌اندازی نقشه‌ها ==========
+function initMainMap() {
+    mainMap = L.map('map').setView([35.6892, 51.3890], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+    }).addTo(mainMap);
+    drawVibeClusters();
+}
+
+function initAddMap() {
+    addMap = L.map('addMap').setView([35.6892, 51.3890], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+    }).addTo(addMap);
+    
+    addMap.on('click', function(e) {
+        openModalForLocation(e.latlng.lat, e.latlng.lng);
+    });
+}
+
+document.getElementById('mainMapSearchBtn').onclick = function() {
+    let q = document.getElementById('mainMapSearchInput').value.trim();
+    if(!q) { showToast("بگو چی می‌خوای"); return; }
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=5`)
+        .then(r => r.json())
+        .then(data => {
+            let div = document.getElementById('mainMapSearchResults');
+            if(!data.length) { div.innerHTML = '<div class="search-result-item">هیچی پیدا نشد</div>'; div.style.display = 'block'; return; }
+            let html = '';
+            for(let item of data) {
+                html += `<div class="search-result-item" onclick="goToMainMapLocation(${item.lat}, ${item.lon}, '${item.display_name.replace(/'/g, "\\'")}')">📍 ${item.display_name.split(',')[0]}</div>`;
+            }
+            div.innerHTML = html;
+            div.style.display = 'block';
+            setTimeout(() => div.style.display = 'none', 5000);
+        });
+};
+
+window.goToMainMapLocation = function(lat, lon, name) {
+    mainMap.setView([parseFloat(lat), parseFloat(lon)], 16);
+    document.getElementById('mainMapSearchResults').style.display = 'none';
+    showToast(`📍 رفتیم به ${name.split(',')[0]}`);
+};
+
+document.getElementById('addMapSearchBtn').onclick = function() {
+    let q = document.getElementById('addMapSearchInput').value.trim();
+    if(!q) { showToast("بگو چی می‌خوای"); return; }
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=5`)
+        .then(r => r.json())
+        .then(data => {
+            let div = document.getElementById('addMapSearchResults');
+            if(!data.length) { div.innerHTML = '<div class="search-result-item">هیچی پیدا نشد</div>'; div.style.display = 'block'; return; }
+            let html = '';
+            for(let item of data) {
+                html += `<div class="search-result-item" onclick="goToAddMapLocation(${item.lat}, ${item.lon}, '${item.display_name.replace(/'/g, "\\'")}')">📍 ${item.display_name.split(',')[0]}</div>`;
+            }
+            div.innerHTML = html;
+            div.style.display = 'block';
+            setTimeout(() => div.style.display = 'none', 5000);
+        });
+};
+
+window.goToAddMapLocation = function(lat, lon, name) {
+    addMap.setView([parseFloat(lat), parseFloat(lon)], 16);
+    document.getElementById('addMapSearchResults').style.display = 'none';
+    showToast(`📍 رفتیم به ${name.split(',')[0]}`);
+};
+
+// ========== ساخت منوها ==========
+function buildMoodSelect(selector = 'moodSelect') {
+    let select = document.getElementById(selector);
+    if(!select) return;
+    let html = '';
+    html += '<optgroup label="🎯 انرژی بالا + حس مثبت">';
+    for(let m of moodList.high_positive) html += `<option value="${m.mood}">${m.emoji} ${m.mood}</option>`;
+    html += '</optgroup><optgroup label="🎯 انرژی پایین + حس مثبت">';
+    for(let m of moodList.low_positive) html += `<option value="${m.mood}">${m.emoji} ${m.mood}</option>`;
+    html += '</optgroup><optgroup label="🎯 انرژی بالا + حس منفی">';
+    for(let m of moodList.high_negative) html += `<option value="${m.mood}">${m.emoji} ${m.mood}</option>`;
+    html += '</optgroup><optgroup label="🎯 انرژی پایین + حس منفی">';
+    for(let m of moodList.low_negative) html += `<option value="${m.mood}">${m.emoji} ${m.mood}</option>`;
+    html += '</optgroup>';
+    select.innerHTML = html;
+    if(selector === 'moodSelect') {
+        select.onchange = function() { selectedMood = moodMap[this.value] || allMoods[0]; updatePersonalSuggestion(); };
+        selectedMood = moodMap[select.value] || allMoods[0];
+    }
+}
+
+function buildVibeSelect(selector = 'vibeSelect') {
+    let select = document.getElementById(selector);
+    if(!select) return;
+    let html = '';
+    for(let v of allVibesData) html += `<option value="${v.vibe}">${v.emoji} ${v.vibe}</option>`;
+    select.innerHTML = html;
+    if(selector === 'vibeSelect') {
+        select.onchange = function() { selectedVibe = allVibesData.find(v => v.vibe === this.value) || allVibesData[0]; };
+        selectedVibe = allVibesData[0];
+    }
+}
+
+function buildFilterVibeSelect() {
+    let select = document.getElementById('filterVibe');
+    let html = '<option value="">همه</option>';
+    for(let v of allVibesData) html += `<option value="${v.vibe}">${v.emoji} ${v.vibe}</option>`;
+    select.innerHTML = html;
+    select.onchange = function() { renderSuggestions(); };
+}
+
+function buildSearchMoodSelect() {
+    let select = document.getElementById('searchMoodFilter');
+    let html = '<option value="">همه مودها</option>';
+    for(let m of allMoods) html += `<option value="${m.mood}">${m.emoji} ${m.mood}</option>`;
+    select.innerHTML = html;
+    select.onchange = function() { currentMoodFilter = this.value; renderSearchResults(); };
+}
+
+function buildSearchVibeSelect() {
+    let select = document.getElementById('searchVibeFilter');
+    let html = '<option value="">همه وایب‌ها</option>';
+    for(let v of allVibesData) html += `<option value="${v.vibe}">${v.emoji} ${v.vibe}</option>`;
+    select.innerHTML = html;
+    select.onchange = function() { currentVibeFilter = this.value; renderSearchResults(); };
+}
+
+// ========== احراز هویت ==========
+function initAuth() {
+    document.getElementById('loginBtn').onclick = async function() {
+        let username = document.getElementById('loginUsername').value.trim();
+        let password = document.getElementById('loginPassword').value;
+        let email = username + "@shaarapp.com";
+        
+        showLoading(true);
+        try {
+            let userCredential = await auth.signInWithEmailAndPassword(email, password);
+            currentUser = userCredential.user;
+            await updateProfileUI();
+            await addSeedData();
+            switchPage(2);
+            await updateMapStats();
+            updatePersonalSuggestion();
+            showToast('خوش اومدی به Shaar');
+        } catch(error) {
+            showToast("اسم یا رمز اشتباه");
+        } finally {
+            showLoading(false);
+        }
+    };
+    
+    document.getElementById('registerBtn').onclick = async function() {
+        let username = document.getElementById('loginUsername').value.trim();
+        let password = document.getElementById('loginPassword').value;
+        
+        if(!username || !password) { showToast("اسم و رمز رو بگو"); return; }
+        if(password.length < 6) { showToast("رمز باید حداقل ۶ کاراکتر باشه"); return; }
+        
+        let email = username + "@shaarapp.com";
+        
+        showLoading(true);
+        try {
+            let userCredential = await auth.createUserWithEmailAndPassword(email, password);
+            currentUser = userCredential.user;
+            await currentUser.updateProfile({ displayName: username });
+            await db.collection('users').doc(currentUser.uid).set({
+                name: username,
+                email: email,
+                friends: [],
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            await updateProfileUI();
+            await addSeedData();
+            switchPage(2);
+            await updateMapStats();
+            updatePersonalSuggestion();
+            showToast('خوش اومدی به Shaar');
+        } catch(error) {
+            showToast("خطا: " + error.message);
+        } finally {
+            showLoading(false);
+        }
+    };
+    
+    document.getElementById('logoutBtn').onclick = async function() {
+        await auth.signOut();
+        currentUser = null;
+        await updateProfileUI();
+        switchPage(6);
+        await updateMapStats();
+        updatePersonalSuggestion();
+        showToast('از Shaar خارج شدی');
+    };
+    
+    auth.onAuthStateChanged(async (user) => {
+        currentUser = user;
+        await updateProfileUI();
+        if(user) {
+            await addSeedData();
+            await updateMapStats();
+            updatePersonalSuggestion();
+        }
+    });
+}
+
+// ========== صفحه سوئیچ ==========
+function switchPage(pageNum) {
+    currentPage = pageNum;
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(`page${pageNum}`).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    document.querySelector(`.nav-item[data-page="${pageNum}"]`).classList.add('active');
+    
+    pushPageToHistory(pageNum);
+    
+    if(pageNum == 2) {
+        setTimeout(() => { if(mainMap) mainMap.invalidateSize(); }, 100);
+        updateMapStats();
+    }
+    if(pageNum == 3) {
+        setTimeout(() => { if(addMap) addMap.invalidateSize(); }, 100);
+        clearSelectedLocation();
+    }
+    if(pageNum == 4) renderSearchResults();
+    if(pageNum == 5) renderFriendsPage();
+    if(pageNum == 1) {
+        renderSuggestions();
+        updateNearbyVibe();
+        updatePersonalSuggestion();
+    }
+    if(pageNum == 6) updateProfileUI();
+}
+
+// ========== مقداردهی اولیه ==========
+document.querySelectorAll('.nav-item').forEach(item => {
+    item.onclick = () => switchPage(parseInt(item.getAttribute('data-page')));
+});
+
+document.getElementById('applyFiltersBtn').onclick = renderSuggestions;
+document.getElementById('profileBtn').onclick = () => switchPage(6);
+document.getElementById('searchUserBtn').onclick = searchUsers;
+document.getElementById('searchTextBtn').onclick = function() {
+    currentSearchText = document.getElementById('searchPlaceInput').value.trim();
+    renderSearchResults();
+};
+document.getElementById('sortSelect').onchange = function() {
+    currentSort = this.value;
+    renderSearchResults();
+};
+document.getElementById('timeFilterSelect').onchange = function() {
+    currentFilter = this.value;
+    renderSearchResults();
+};
+document.getElementById('clearFiltersBtn').onclick = function() {
+    currentSearchText = "";
+    currentMoodFilter = "";
+    currentVibeFilter = "";
+    currentFilter = "all";
+    currentSort = "newest";
+    document.getElementById('searchPlaceInput').value = "";
+    document.getElementById('searchMoodFilter').value = "";
+    document.getElementById('searchVibeFilter').value = "";
+    document.getElementById('timeFilterSelect').value = "all";
+    document.getElementById('sortSelect').value = "newest";
+    renderSearchResults();
+};
+
+document.getElementById('modalSubmitBtn').onclick = addMemoryFromModal;
+document.getElementById('modalCancelBtn').onclick = closeModal;
+
+document.getElementById('modalStory').oninput = function() {
+    document.getElementById('modalCharCounter').innerText = this.value.length + '/140';
+};
+
+document.getElementById('saveEditBtn').onclick = saveEditMemory;
+document.getElementById('cancelEditBtn').onclick = function() {
+    document.getElementById('editModal').classList.remove('show');
+    editingMemoryId = null;
+};
+
+// اسپلش اسکرین را مخفی کن
+setTimeout(() => {
+    let splash = document.getElementById('splash');
+    if(splash) {
+        splash.classList.add('hide');
+        setTimeout(() => {
+            splash.style.display = 'none';
+        }, 500);
+    }
+}, 1500);
+
+// راه‌اندازی
+buildMoodSelect('moodSelect');
+buildVibeSelect('vibeSelect');
+buildMoodSelect('modalMoodSelect');
+buildVibeSelect('modalVibeSelect');
+buildMoodSelect('editMoodSelect');
+buildVibeSelect('editVibeSelect');
+buildFilterVibeSelect();
+buildSearchMoodSelect();
+buildSearchVibeSelect();
+initAuth();
+
+initMainMap();
+initAddMap();
+
+// مقداردهی اولیه منوهای مودال
+let modalMoodSelect = document.getElementById('modalMoodSelect');
+let modalVibeSelect = document.getElementById('modalVibeSelect');
+if(modalMoodSelect) {
+    modalMoodSelect.innerHTML = '';
+    for(let m of allMoods) {
+        let opt = document.createElement('option');
+        opt.value = m.mood;
+        opt.innerHTML = m.emoji + ' ' + m.mood;
+        modalMoodSelect.appendChild(opt);
+    }
+}
+if(modalVibeSelect) {
+    modalVibeSelect.innerHTML = '';
+    for(let v of allVibesData) {
+        let opt = document.createElement('option');
+        opt.value = v.vibe;
+        opt.innerHTML = v.emoji + ' ' + v.vibe;
+        modalVibeSelect.appendChild(opt);
+    }
+}
+
+switchPage(2);
+updateStreakCount();
+updatePersonalSuggestion();
+
+window.acceptFriendRequest = acceptFriendRequest;
+window.rejectFriendRequest = rejectFriendRequest;
+window.sendFriendRequest = sendFriendRequest;
+window.removeFriend = removeFriend;
+window.likeMemory = likeMemory;
+window.editMemory = editMemory;
+window.deleteMemory = deleteMemory;
+window.goToMainMapLocation = goToMainMapLocation;
+window.goToAddMapLocation = goToAddMapLocation;
+
+history.pushState({ page: 2 }, '', '');
+
+</script>
+</body>
+</html>
